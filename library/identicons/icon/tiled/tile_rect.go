@@ -2,15 +2,15 @@ package tiled
 
 import (
 	svg "github.com/ajstarks/svgo"
-	"github.com/dotstart/identicons/internal/util"
+	"github.com/dotstart/identicons/library/identicons/shape"
 	"math"
 )
 
-var originPoints = []*util.Vert2d{
-	util.Vert(-1, -1), // top-left
-	util.Vert(1, -1),  // top-right
-	util.Vert(1, 1),   // bottom-right
-	util.Vert(-1, 1),  // bottom-left
+var originPoints = []*shape.Vert2d{
+	shape.Vert(-1, -1), // top-left
+	shape.Vert(1, -1),  // top-right
+	shape.Vert(1, 1),   // bottom-right
+	shape.Vert(-1, 1),  // bottom-left
 }
 
 type rectTile struct {
@@ -40,13 +40,13 @@ func (t *rectTile) Draw(canvas *svg.SVG, x float64, y float64, size float64, fli
 
 	destination := origin
 	destination.Invert()
-	destination.Multiply(util.Vert(t.scaleX, t.scaleY))
+	destination.Multiply(shape.Vert(t.scaleX, t.scaleY))
 
 	origin.X = math.Max(0, origin.X)
 	origin.Y = math.Max(0, origin.Y)
 	destination.Plus(&origin)
 
-	begin := util.MinVert(&origin, &destination)
+	begin := shape.MinVert(&origin, &destination)
 
 	ax := int(math.Floor(x + (begin.X * size)))
 	ay := int(math.Floor(y + (begin.Y * size)))

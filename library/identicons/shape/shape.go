@@ -1,4 +1,4 @@
-package util
+package shape
 
 import (
 	"fmt"
@@ -6,15 +6,15 @@ import (
 	"github.com/lucasb-eyer/go-colorful"
 )
 
-type Shape struct {
+type Shape2d struct {
 	vertices []*Vert2d
 }
 
-func NewShape(vertices ...*Vert2d) *Shape {
-	return &Shape{vertices}
+func New(vertices ...*Vert2d) *Shape2d {
+	return &Shape2d{vertices}
 }
 
-func (s *Shape) Flip(flipX bool, flipY bool) {
+func (s *Shape2d) Flip(flipX bool, flipY bool) {
 	if !flipX && !flipY {
 		return
 	}
@@ -36,7 +36,7 @@ func (s *Shape) Flip(flipX bool, flipY bool) {
 	s.vertices = vertices
 }
 
-func (s *Shape) Rotate() {
+func (s *Shape2d) Rotate() {
 	vertices := make([]*Vert2d, len(s.vertices))
 	for i, v := range s.vertices {
 		vertex := *v
@@ -55,7 +55,7 @@ func (s *Shape) Rotate() {
 	s.vertices = vertices
 }
 
-func (s Shape) Draw(canvas *svg.SVG, offX float64, offY float64, scaleX float64, scaleY float64, fill *colorful.Color, stroke *colorful.Color) {
+func (s Shape2d) Draw(canvas *svg.SVG, offX float64, offY float64, scaleX float64, scaleY float64, fill *colorful.Color, stroke *colorful.Color) {
 	if len(s.vertices) < 2 {
 		return
 	}
