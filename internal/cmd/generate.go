@@ -4,14 +4,11 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/dotstart/identicons/library/identicons"
 	"github.com/google/subcommands"
 	"math/rand"
 	"os"
 	"time"
 )
-
-var generatorRegistry = identicons.DefaultRegistry()
 
 type generateCommand struct {
 	generator string
@@ -31,18 +28,7 @@ func (*generateCommand) Synopsis() string {
 }
 
 func (*generateCommand) Usage() string {
-	generators := ""
-	for _, gen := range generatorRegistry.Ids() {
-		if generators != "" {
-			generators += "\n"
-		}
-
-		generators += " * " + gen
-
-		if gen == "modern" {
-			generators += " (default)"
-		}
-	}
+	generators := getGeneratorList()
 
 	return `generate [options] <out-file> <input-string>
 
@@ -70,7 +56,7 @@ The following command line options are made available by this command:
 }
 
 func (cmd *generateCommand) SetFlags(f *flag.FlagSet) {
-	f.StringVar(&cmd.generator, "generator", "modern", "specifies the desired identicon generator")
+	f.StringVar(&cmd.generator, "generator", defaultGenerator, "specifies the desired identicon generator")
 	f.BoolVar(&cmd.random, "random", false, "generates a random identicon")
 }
 
