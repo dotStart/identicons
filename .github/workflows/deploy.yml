@@ -19,14 +19,12 @@ jobs:
       - run: go version
       - name: Login to GitHub Container Registry
         uses: docker/build-push-action@v1
-        if: ${{ matrix.java == '11' }}
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
       - name: Login to Official Container Registry
         uses: docker/build-push-action@v1
-        if: ${{ matrix.java == '11' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
