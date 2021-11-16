@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build & Deploy
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,6 +17,24 @@ jobs:
         with:
           go-version: '^1.17.1'
       - run: go version
+      - name: Build
+        run: make
+      - name: Test
+        run: make test
+      - uses: actions/upload-artifact@master
+        with:
+          name: executables
+          path: ${{ github.workspace }}/target/**/*
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@master
+        with:
+          name: executables
+          path: ${{ github.workspace }}/target/
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
@@ -28,10 +46,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build
-        run: make
-      - name: Test
-        run: make test
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Build & Deploy Latest Docker Image
