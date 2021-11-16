@@ -62,7 +62,7 @@ test: check-env
 	@echo "==> running tests"
 	@$(GO) test ./...
 
-docker-prepare:
+docker-prepare: licenses
 	@echo "==> preparing docker build environment"
 	@echo -n "Checking for docker ... "
 ifndef DOCKER
