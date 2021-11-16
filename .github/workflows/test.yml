@@ -1,5 +1,9 @@
 name: Build and Test
-on: [ push, pull_request ]
+on:
+  push:
+    branches-ignore:
+      - master
+  pull_request:
 
 jobs:
   build:
