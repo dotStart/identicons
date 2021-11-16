@@ -38,6 +38,7 @@ jobs:
         if: ${{ github.ref_name == 'master' }}
         run: make deploy-latest
       - name: Upload Executable
+        if: ${{ github.event == 'create' }}
         uses: actions/upload-artifact@v1
         with:
           name: identicons
