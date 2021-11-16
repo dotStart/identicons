@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/dotstart/identicons/internal/build"
 	iconhttp "github.com/dotstart/identicons/library/identicons/http"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -133,7 +134,20 @@ func (cmd *serveCommand) Execute(context.Context, *flag.FlagSet, ...interface{})
 		r = wrapped
 	}
 
-	fmt.Printf("listening on %s\n\n", bind)
+	fmt.Println("==> identicons server")
+	fmt.Println()
+	fmt.Printf("     version: %s\n", build.FullVersion())
+	fmt.Printf(" commit hash: %s\n", build.CommitHash())
+	fmt.Printf("  built time: %s\n", build.BuildTimestamp())
+	fmt.Println()
+	fmt.Printf("  default generator: %s\n", cmd.generator)
+	fmt.Printf("    request timeout: %s\n", cmd.timeout)
+	fmt.Printf("anonymize addresses: %v\n", cmd.anonymizeRemoteAddr)
+	fmt.Println()
+
+	fmt.Printf("==> listening for requests on %s\n\n", bind)
+	fmt.Println()
+
 	err = http.ListenAndServe(bind, r)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "failed to bind: %s\n", err)
