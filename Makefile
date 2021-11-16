@@ -44,6 +44,15 @@ licenses:
 	@$(GO) install github.com/google/go-licenses@latest
 	@go-licenses save --force "github.com/dotstart/identicons/cmd/identicons" --save_path="target/licenses/" || true
 
+.ONESHELL:
+$(PLATFORMS): check-env
+	@export GOOS=$(os);
+	@export GOARCH=$(arch);
+
+	@echo "==> Building ${os}-${arch}"
+	@$(GO) build -v -ldflags "${LDFLAGS}" -o target/$(os)-$(arch)/identicons$(ext) github.com/dotstart/identicons/cmd/identicons
+	@$(TAR) -C "target/$(os)-$(arch)/" -czvf "target/identicons_$(os)-$(arch).tar.gz" "identicons$(ext)"
+
 docker: check-env licenses linux/amd64
 	@echo "==> building docker container"
 	@cp -r target/licenses/ build/package/
@@ -65,14 +74,5 @@ deploy-latest: deploy
 	@docker push dotstart/identicons:latest
 	@docker tag dotstart/identicons:${APPLICATION_VERSION} github.com/dotstart/identicons:latest
 	@docker push github.com/dotstart/identicons:latest
-
-.ONESHELL:
-$(PLATFORMS): check-env
-	@export GOOS=$(os);
-	@export GOARCH=$(arch);
-
-	@echo "==> Building ${os}-${arch}"
-	@$(GO) build -v -ldflags "${LDFLAGS}" -o target/$(os)-$(arch)/identicons$(ext) github.com/dotstart/identicons/cmd/identicons
-	@$(TAR) -C "target/$(os)-$(arch)/" -czvf "target/identicons_$(os)-$(arch).tar.gz" "identicons$(ext)"
 
 .PHONY: all
