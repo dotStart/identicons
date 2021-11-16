@@ -34,14 +34,9 @@ jobs:
         run: make test
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      - name: Build Docker Image
-        run: update-binfmts --enable && make docker-multiarch
-      - name: Deploy Latest Image
+      - name: Build & Deploy Latest Docker Image
         if: ${{ github.ref_name == 'master' }}
-        run: make deploy-latest
-      - name: Upload Executable
-        if: ${{ github.event == 'create' }}
-        uses: actions/upload-artifact@v1
-        with:
-          name: identicons
-          path: target/identicons_*.tar.gz
+        run: update-binfmts --enable && make docker-multiarch-master
+      - name: Build & Deploy Versioned Docker Image
+        if: ${{ github.ref_name != 'master' }}
+        run: update-binfmts --enable && make docker-multiarch
