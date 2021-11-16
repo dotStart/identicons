@@ -11,7 +11,7 @@ func MaskBits64(n uint) uint64 {
 		return 1
 	}
 	if n > 64 {
-		panic(fmt.Sprintf("%d bits exceeds maximum permitted value of 64"))
+		panic(fmt.Sprintf("%d bits exceeds maximum permitted value of 64", n))
 	}
 
 	value := uint64(1)
