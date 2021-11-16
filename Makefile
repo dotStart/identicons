@@ -53,6 +53,10 @@ $(PLATFORMS): check-env
 	@$(GO) build -v -ldflags "${LDFLAGS}" -o target/$(os)-$(arch)/identicons$(ext) github.com/dotstart/identicons/cmd/identicons
 	@$(TAR) -C "target/$(os)-$(arch)/" -czvf "target/identicons_$(os)-$(arch).tar.gz" "identicons$(ext)"
 
+test: check-env
+	@echo "==> running tests"
+	@$(GO) test ./...
+
 docker: check-env licenses linux/amd64
 	@echo "==> building docker container"
 	@cp -r target/licenses/ build/package/
