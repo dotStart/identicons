@@ -78,14 +78,14 @@ endif
 	@cp target/linux-arm/identicons build/package/identicons_arm
 	@cp target/linux-arm64/identicons build/package/identicons_arm64
 
-docker: linux/amd64 docker-prepare
+docker: docker-prepare
 	@echo "==> building docker container"
 	@docker build -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} build/package/
 
-docker-multiarch: $(PLATFORMS) docker-prepare
+docker-multiarch: docker-prepare
 	@docker buildx build --push -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} -t dotstart/identicons:${APPLICATION_VERSION} --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
 
-docker-multiarch-master: $(PLATFORMS) docker-prepare
+docker-multiarch-master: docker-prepare
 	@docker buildx build --push -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} -t ghcr.io/dotstart/identicons:latest -t dotstart/identicons:${APPLICATION_VERSION} -t dotstart/identicons:latest --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
 
 deploy:
