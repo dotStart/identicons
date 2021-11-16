@@ -32,6 +32,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build
         run: make
+      - name: Test
+        run: make test
       - name: Deploy Docker Image
         run: make deploy
       - name: Deploy Latest Image
