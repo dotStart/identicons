@@ -31,7 +31,7 @@ ifndef TAR
 	@echo "Not Found"
 	$(error "tar is unavailable")
 endif
-	@echo $(GO)
+	@echo $(TAR)
 	@echo ""
 
 clean:
