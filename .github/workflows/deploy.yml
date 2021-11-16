@@ -32,8 +32,10 @@ jobs:
         run: make
       - name: Test
         run: make test
-      - name: Deploy Docker Image
-        run: make deploy
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build Docker Image
+        run: make docker-multiarch
       - name: Deploy Latest Image
         if: ${{ github.ref_name == 'master' }}
         run: make deploy-latest
