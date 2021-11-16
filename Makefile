@@ -44,6 +44,7 @@ clean:
 
 licenses:
 	@echo "==> collecting 3rd party licenses"
+	@$(GO) mod download
 	@$(GO) install github.com/google/go-licenses@latest
 	@go-licenses save --force "github.com/dotstart/identicons/cmd/identicons" --save_path="target/licenses/" || true
 
