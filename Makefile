@@ -71,14 +71,14 @@ docker: check-env licenses linux/amd64
 deploy: docker
 	@echo "==> pushing docker images"
 	@docker push dotstart/identicons:${APPLICATION_VERSION}
-	@docker tag dotstart/identicons:${APPLICATION_VERSION} github.com/dotstart/identicons:${APPLICATION_VERSION}
-	@docker push github.com/dotstart/identicons:${APPLICATION_VERSION}
+	@docker tag dotstart/identicons:${APPLICATION_VERSION} ghcr.io/dotstart/identicons:${APPLICATION_VERSION}
+	@docker push ghcr.io/dotstart/identicons:${APPLICATION_VERSION}
 
 deploy-latest: deploy
 	@echo "==> tagging latest docker image"
 	@docker tag dotstart/identicons:${APPLICATION_VERSION} dotstart/identicons:latest
 	@docker push dotstart/identicons:latest
-	@docker tag dotstart/identicons:${APPLICATION_VERSION} github.com/dotstart/identicons:latest
-	@docker push github.com/dotstart/identicons:latest
+	@docker tag dotstart/identicons:${APPLICATION_VERSION} ghcr.io/dotstart/identicons:latest
+	@docker push ghcr.io/dotstart/identicons:latest
 
 .PHONY: all
