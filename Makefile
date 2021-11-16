@@ -51,6 +51,8 @@ $(PLATFORMS): check-env
 
 	@echo "==> Building ${os}-${arch}"
 	@$(GO) build -v -ldflags "${LDFLAGS}" -o target/$(os)-$(arch)/identicons$(ext) github.com/dotstart/identicons/cmd/identicons
+
+	@echo "==> Creating ${os}-${arch}.tar.gz"
 	@$(TAR) -C "target/$(os)-$(arch)/" -czvf "target/identicons_$(os)-$(arch).tar.gz" "identicons$(ext)"
 
 test: check-env
