@@ -1,6 +1,9 @@
 package color
 
-import "github.com/lucasb-eyer/go-colorful"
+import (
+	"github.com/lucasb-eyer/go-colorful"
+	"math/bits"
+)
 
 type hslGenerator struct {
 	saturation float64
@@ -12,7 +15,7 @@ func HSL(saturation float64, lightness float64) Generator {
 }
 
 func (*hslGenerator) RequiredBits() uint {
-	return 9
+	return uint(bits.Len(uint(359)))
 }
 
 func (g *hslGenerator) Generate(code uint64) colorful.Color {
