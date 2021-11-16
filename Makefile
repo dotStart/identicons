@@ -85,6 +85,12 @@ docker: linux/amd64 docker-prepare
 docker-multiarch: $(PLATFORMS) docker-prepare
 	@docker buildx build --push -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
 
+deploy:
+	@echo "==> tagging v${APPLICATION_VERSION} docker image"
+	@docker push ghcr.io/dotstart/identicons:${APPLICATION_VERSION}
+	@docker tag ghcr.io/dotstart/identicons:${APPLICATION_VERSION} dotstart/identicons:${APPLICATION_VERSION}
+	@docker push dotstart/identicons:${APPLICATION_VERSION}
+
 deploy-latest:
 	@echo "==> tagging latest docker image"
 	@docker tag ghcr.io/dotstart/identicons:${APPLICATION_VERSION} ghcr.io/dotstart/identicons:latest
