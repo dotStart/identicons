@@ -11,7 +11,7 @@ type shapeTile struct {
 
 // Shape creates a new tile which draws a given shape consisting of two or more vertices.
 func Shape(vertices ...*shape.Vert2d) Tile {
-	return &shapeTile{shape.New(vertices...)}
+	return &shapeTile{shape.Shape(vertices...)}
 }
 
 func (t *shapeTile) Draw(canvas *svg.SVG, x float64, y float64, size float64, flipX bool, flipY bool, rotations uint) {

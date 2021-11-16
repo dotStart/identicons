@@ -10,7 +10,7 @@ type Shape2d struct {
 	vertices []*Vert2d
 }
 
-func New(vertices ...*Vert2d) *Shape2d {
+func Shape(vertices ...*Vert2d) *Shape2d {
 	return &Shape2d{vertices}
 }
 
