@@ -83,16 +83,16 @@ docker: docker-prepare
 	@echo "==> building docker container"
 	@docker build -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} build/package/
 
-docker-multiarch: docker-prepare
+docker-multiarch-versioned: docker-prepare
+	@echo "==> building versioned multiarch docker container"
 	@docker buildx build --push -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} -t dotstart/identicons:${APPLICATION_VERSION} --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
 
-docker-multiarch-master: docker-prepare
-	@docker buildx build --push -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} -t ghcr.io/dotstart/identicons:latest -t dotstart/identicons:${APPLICATION_VERSION} -t dotstart/identicons:latest --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
+docker-multiarch-latest: docker-prepare
+	@echo "==> building latest multiarch docker container"
+	@docker buildx build --push -t ghcr.io/dotstart/identicons:latest -t dotstart/identicons:latest --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
 
-deploy:
-	@echo "==> tagging v${APPLICATION_VERSION} docker image"
-	@docker push ghcr.io/dotstart/identicons:${APPLICATION_VERSION}
-	@docker tag ghcr.io/dotstart/identicons:${APPLICATION_VERSION} dotstart/identicons:${APPLICATION_VERSION}
-	@docker push dotstart/identicons:${APPLICATION_VERSION}
+docker-multiarch-dev: docker-prepare
+	@echo "==> building dev multiarch docker container"
+	@docker buildx build --push -t ghcr.io/dotstart/identicons:dev -t dotstart/identicons:dev --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
 
 .PHONY: all
