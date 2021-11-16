@@ -4,11 +4,12 @@ APPLICATION_TIMESTAMP := `date --utc "+%s"`
 
 LDFLAGS :=-X 'github.com/dotstart/identicons/internal/build.version=${APPLICATION_VERSION}' -X 'github.com/dotstart/identicons/internal/build.commitHash=${APPLICATION_COMMIT_HASH}' -X 'github.com/dotstart/identicons/internal/build.timestampRaw=${APPLICATION_TIMESTAMP}'
 
+DOCKER := $(shell command -v docker 2> /dev/null)
 GO := $(shell command -v go 2> /dev/null)
 TAR := $(shell command -v tar 2> /dev/null)
 export
 
-PLATFORMS := darwin/amd64 linux/amd64 linux/arm windows/amd64/.exe
+PLATFORMS := darwin/amd64 linux/amd64 linux/arm linux/arm64 windows/amd64/.exe
 
 # magical formula:
 temp = $(subst /, ,$@)
@@ -37,6 +38,8 @@ endif
 clean:
 	@echo "==> Clearing previous build data"
 	@rm -rf out/ || true
+	@rm -rf build/package/licenses/ || true
+	@rm -rf build/package/identicons_* || true
 	@$(GO) clean -cache
 
 licenses:
@@ -59,26 +62,36 @@ test: check-env
 	@echo "==> running tests"
 	@$(GO) test ./...
 
-docker: check-env licenses linux/amd64
-	@echo "==> building docker container"
+docker-prepare:
+	@echo "==> preparing docker build environment"
+	@echo -n "Checking for docker ... "
+ifndef DOCKER
+	@echo "Not Found"
+	$(error "docker is unavailable")
+endif
+	@echo $(DOCKER)
+	@echo ""
+
 	@cp -r target/licenses/ build/package/
 	@cp LICENSE build/package/licenses/
-	@cp target/linux-amd64/identicons build/package/
-	@docker build -t dotstart/identicons:${APPLICATION_VERSION} build/package/
-	@rm -rf build/package/licenses/ || true
-	@rm build/package/identicons || true
+	@cp target/linux-amd64/identicons build/package/identicons_amd64
+	@cp target/linux-arm/identicons build/package/identicons_arm
+	@cp target/linux-arm64/identicons build/package/identicons_arm64
 
-deploy: docker
-	@echo "==> pushing docker images"
-	@docker push dotstart/identicons:${APPLICATION_VERSION}
-	@docker tag dotstart/identicons:${APPLICATION_VERSION} ghcr.io/dotstart/identicons:${APPLICATION_VERSION}
-	@docker push ghcr.io/dotstart/identicons:${APPLICATION_VERSION}
+docker: linux/amd64 docker-prepare
+	@echo "==> building docker container"
+	@docker build -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} build/package/
 
-deploy-latest: deploy
+docker-multiarch: $(PLATFORMS) docker-prepare
+	@docker buildx build --push -t ghcr.io/dotstart/identicons:${APPLICATION_VERSION} --platform linux/amd64,linux/arm64,linux/arm/v7 build/package/
+
+deploy-latest:
 	@echo "==> tagging latest docker image"
-	@docker tag dotstart/identicons:${APPLICATION_VERSION} dotstart/identicons:latest
-	@docker push dotstart/identicons:latest
-	@docker tag dotstart/identicons:${APPLICATION_VERSION} ghcr.io/dotstart/identicons:latest
+	@docker tag ghcr.io/dotstart/identicons:${APPLICATION_VERSION} ghcr.io/dotstart/identicons:latest
 	@docker push ghcr.io/dotstart/identicons:latest
+	@docker tag ghcr.io/dotstart/identicons:${APPLICATION_VERSION} dotstart/identicons:${APPLICATION_VERSION}
+	@docker push dotstart/identicons:${APPLICATION_VERSION}
+	@docker tag ghcr.io/dotstart/identicons:${APPLICATION_VERSION} dotstart/identicons:latest
+	@docker push dotstart/identicons:latest
 
 .PHONY: all
