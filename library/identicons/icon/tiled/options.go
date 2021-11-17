@@ -27,16 +27,18 @@ func ForegroundColor(color color.Generator) Option {
 }
 
 // BackgroundColor selects the color of the background rectangle of the resulting image.
-func BackgroundColor(color *colorful.Color) Option {
+func BackgroundColor(color colorful.Color) Option {
 	return func(g *Generator) {
-		g.backgroundColor = color
+		g.backgroundColor = &color
 	}
 }
 
 // TransparentBackground disables the background coloring for the resulting image thus making it
 // transparent where tiles did not draw geometry.
 func TransparentBackground() Option {
-	return BackgroundColor(nil)
+	return func(g *Generator) {
+		g.backgroundColor = nil
+	}
 }
 
 // ColoredSides causes the unique sections within the image to be colored differently to make
