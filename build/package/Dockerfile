@@ -1,20 +1,16 @@
-FROM golang:1.17-alpine
+FROM golang:1.17
 
 ARG TARGETPLATFORM=amd64
 
-RUN addgroup -S identicons && \
-    adduser -S identicons -G identicons
+RUN useradd -U identicons
 
 RUN mkdir /executables /licenses
 COPY identicons_* /executables/
 COPY licenses/* /licenses/
 
-RUN apk add --no-cache sed && \
-    which sed && \
-    SUFFIX=$(echo $TARGETPLATFORM | sed -E 's/^[^\/]+\/([^\/]+)(\/.*)?/\1/') && \
+RUN SUFFIX=$(echo $TARGETPLATFORM | sed -E 's/^[^\/]+\/([^\/]+)(\/.*)?/\1/') && \
     cp /executables/identicons_$SUFFIX /identicons && \
-    rm -r /executables/ && \
-    apk del sed
+    rm -r /executables/
 
 EXPOSE 8080
 USER identicons
