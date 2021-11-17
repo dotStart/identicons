@@ -2,9 +2,16 @@ package shape
 
 import "math"
 
+var zero = Vert(0, 0)
+
 type Vert2d struct {
 	X float64
 	Y float64
+}
+
+func Zero() *Vert2d {
+	c := *zero
+	return &c
 }
 
 func Vert(x float64, y float64) *Vert2d {

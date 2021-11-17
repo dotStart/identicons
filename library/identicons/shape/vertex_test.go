@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+func TestZero(t *testing.T) {
+	a := Zero()
+	b := Zero()
+
+	a.X = 42
+
+	assert.NotEqual(t, a.X, b.X)
+}
+
 func TestVert(t *testing.T) {
 	for x := 0; x < 16; x++ {
 		for y := 0; y < 16; y++ {
