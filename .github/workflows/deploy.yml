@@ -54,7 +54,7 @@ jobs:
   deploy-dev:
     name: Deploy dev Container
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'master' }}
+    if: ${{ github.ref_name == 'develop' }}
     needs: build
     steps:
       - uses: actions/setup-go@v2
