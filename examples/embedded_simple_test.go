@@ -1,4 +1,4 @@
-package identicons
+package examples
 
 import (
 	"bytes"
