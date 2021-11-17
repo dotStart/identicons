@@ -21,6 +21,13 @@ func Vert(x float64, y float64) *Vert2d {
 	}
 }
 
+func VertAngle(r float64, angle float64) *Vert2d {
+	x := r * math.Cos(angle)
+	y := r * math.Sin(angle)
+
+	return Vert(x, y)
+}
+
 func (v *Vert2d) Invert() {
 	v.X = -v.X
 	v.Y = -v.Y
