@@ -22,11 +22,13 @@ jobs:
         run: make
       - name: Test
         run: make test
-      - uses: actions/upload-artifact@master
+      - name: Collect executables
+        uses: actions/upload-artifact@master
         with:
           name: executables
           path: ${{ github.workspace }}/target/**/*
-      - uses: actions/upload-artifact@master
+      - name: Collect packages
+        uses: actions/upload-artifact@master
         with:
           name: packages
           path: ${{ github.workspace }}/target/*.tar.gz
