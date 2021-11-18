@@ -37,7 +37,7 @@ endif
 
 clean:
 	@echo "==> Clearing previous build data"
-	@rm -rf out/ || true
+	@rm -rf target/ || true
 	@rm -rf build/package/licenses/ || true
 	@rm -rf build/package/identicons_* || true
 	@$(GO) clean -cache
