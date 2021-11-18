@@ -33,7 +33,7 @@ jobs:
           name: packages
           path: ${{ github.workspace }}/target/*.tar.gz
   deploy-versioned:
-    name: Deploy Versioned Container
+    name: Deploy Container (Versioned)
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -61,7 +61,7 @@ jobs:
       - name: Build & Deploy Latest Docker Image
         run: update-binfmts --enable && make docker-multiarch-versioned
   deploy-dev:
-    name: Deploy dev Container
+    name: Deploy Container (dev)
     runs-on: ubuntu-latest
     if: ${{ github.ref_name == 'develop' }}
     needs: build
@@ -90,7 +90,7 @@ jobs:
       - name: Build & Deploy Latest Docker Image
         run: update-binfmts --enable && make docker-multiarch-dev
   deploy-latest:
-    name: Deploy Container
+    name: Deploy Container (Latest)
     runs-on: ubuntu-latest
     if: ${{ github.ref_name == 'master' }}
     needs: build
