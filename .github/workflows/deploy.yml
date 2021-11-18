@@ -32,6 +32,20 @@ jobs:
         with:
           name: packages
           path: ${{ github.workspace }}/target/*.tar.gz
+  deploy-github:
+    name: Create Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event == 'create' }}
+    needs: build
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: packages
+          path: ${{ github.workspace }}/target/
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "target/*.tar.gz"
+          token: ${{ secrets.GITHUB_TOKEN }}
   deploy-versioned:
     name: Deploy Container (Versioned)
     runs-on: ubuntu-latest
