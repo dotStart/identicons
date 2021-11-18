@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build & Test
+    name: Build and Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
