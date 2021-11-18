@@ -49,6 +49,7 @@ jobs:
   deploy-versioned:
     name: Deploy Container (Versioned)
     runs-on: ubuntu-latest
+    if: ${{ github.event == 'create' }}
     needs: build
     steps:
       - uses: actions/setup-go@v2
