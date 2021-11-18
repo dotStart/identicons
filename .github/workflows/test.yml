@@ -18,10 +18,5 @@ jobs:
       - run: go version
       - name: Build
         run: make
-      - name: Upload Executable
-        uses: actions/upload-artifact@v1
-        with:
-          name: executables
-          path: ${{ github.workspace }}/target/**/*
       - name: Test
         run: make test
